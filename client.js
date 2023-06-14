@@ -15,8 +15,16 @@ const connect = function() {
   //listen to incoming data
   conn.on('data', data => {
     console.log('server says: ', data);
-  })
+  });
 
+  
+  //function to be tirggered when there is a successful connection to the game server
+  conn.on('connect', () => {
+
+    console.log('Successfully connected to the game server');
+    
+    conn.write('Name: Ola');
+  });
 
   return conn;
 };
