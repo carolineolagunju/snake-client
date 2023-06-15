@@ -13,13 +13,13 @@ const connect = function() {
   conn.setEncoding = ('utf8');
 
 
-  //listen to incoming data from game server
+  //listen to incoming data from server
   conn.on('data', data => {
     console.log('server says: ', data);
   });
 
   
-  //function to be triggered when there is a successful connection to the game server
+  //function to be triggered when there is a successful connection to the server
   conn.on('connect', () => {
     console.log('Successfully connected to the game server');
 
@@ -29,9 +29,6 @@ const connect = function() {
   return conn;
 };
 
-console.log('Connecting ....');
-
-//calling function connect
-connect();
+//connect();
 
 module.exports = {connect};
