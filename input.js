@@ -1,51 +1,53 @@
-const {MOVE_UP_KEY, MOVE_LEFT_KEY, MOVE_DOWN_KEY, MOVE_RIGHT_KEY, EXIT_GAME, messages} = require('./constants');
+const {movementKeys, EXIT_GAME, cannedMsg } = require('./constants');
 
 let connection;
 
-// setup interface to handle user input from stdin
+// setup interface to handle user input
 const setupInput = function(conn) {
   connection = conn;
+  let moveInterval;
 
   const stdin = process.stdin;
   stdin.setRawMode(true);
   stdin.setEncoding("utf8");
   stdin.resume();
 
- 
-  //function that handles the input from the user
-  const handleUserInput = function() {
-    stdin.on('data', (key) => {
-      //exit when user press ctrl + c on their keyboard
-      if (key === EXIT_GAME) {
-        process.exit();
-      }
 
-      if (key === MOVE_UP_KEY) {
-        connection.write('Move: up');
-      }
+  //handles user input
+  const handleUserInput = (key) => {
+    key = key.toLowerCase();
 
-      if (key === MOVE_LEFT_KEY) {
-        connection.write('Move: left');
-      }
+    //exit when user press ctrl + c
+    if (key === EXIT_GAME) {
+      process.exit();
+    }
 
-      if (key === MOVE_DOWN_KEY) {
-        connection.write('Move: down');
-      }
+    //continious snake movement
+    const snakeMoves = function(moves) {
+      moveInterval = setInterval(() => {
+        connection.write(moves);
+      }, 150);
+    };
 
-      if (key === MOVE_RIGHT_KEY) {
-        connection.write('Move: right');
-      }
+    const moves = movementKeys[key];
 
-      for (const msg in messages) {
-        if (key === msg) {
-          connection.write(`Say:  ${messages[msg]}`);
-        }
+    //if new movement, snake continously moves in the specified direction
+    if (moves) {
+      clearInterval(moveInterval);
+      snakeMoves(moves);
+    }
+
+    //canned messages
+    for (const msg in cannedMsg) {
+      if (key === msg) {
+        connection.write(`Say: ${cannedMsg[msg]}`);
       }
-    });
+    }
   };
-  handleUserInput();
+  
+  stdin.on('data', handleUserInput);
 
   return stdin;
 };
 
-module.exports = {setupInput};
+module.exports = { setupInput };
