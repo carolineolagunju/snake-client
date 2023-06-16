@@ -21,7 +21,7 @@ const connect = function() {
   conn.on('connect', () => {
     console.log('Successfully connected to the game server');
 
-  //commandline argumant to type in userName upon connection (maximum of 3 character)
+    //commandline argumant to type in userName upon connection (maximum of 3 character)
     conn.write(`Name: ${userName}`);
   });
 
