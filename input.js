@@ -15,6 +15,7 @@ const setupInput = function(conn) {
 
   //handles user input
   const handleUserInput = (key) => {
+    //allows lower or uppercase user input
     key = key.toLowerCase();
 
     //exit when user press ctrl + c
@@ -44,7 +45,7 @@ const setupInput = function(conn) {
       }
     }
   };
-  
+
   stdin.on('data', handleUserInput);
 
   return stdin;
